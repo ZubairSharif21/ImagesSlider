@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+
+        .logos {
+            overflow: hidden;
+            padding: 60px 0;
+            background: #f7f5ff;
+            white-space: nowrap;
+            position: relative;
+        }
+
+        .logos:before,
+        .logos:after {
+            position: absolute;
+            top: 0;
+            width: 250px;
+            height: 85%;
+            content: "";
+            z-index: 2;
+        }
+
+        .logos:before {
+            left: 0;
+            background: linear-gradient(to left, rgba(255, 255, 255, 0), #f7f5ff);
+        }
+
+        .logos:after {
+            right: 0;
+            background: linear-gradient(to right, rgba(255, 255, 255, 0), #f7f5ff);
+        }
+
+        .logos:hover .logos-slide {
+            animation-play-state: paused;
+        }
+
+        .logos-slide {
+            display: inline-block;
+            animation: 15s slide infinite linear;
+        }
+
+        .logos-slide img {
+            width: 35%;
+            margin: 0 4rem;
+        }
+
+        /*! CSS Used from: https://startsiteonline.com/startmobil.css */
+        @media (max-width: 62em) {
+            .logos-slide img {
+                width: 60%;
+                margin: 0 3rem;
+            }
+
+            .logos:before,
+            .logos:after {
+                display: none;
+            }
+        }
+
+        /*! Your existing CSS styles... */
+        .logos-slide {
+            display: flex;
+            /* Use flexbox for horizontal layout */
+            transition: transform 1s ease-in-out;
+            /* Add sliding animation */
+    
+            /* Adjust based on the number of images */
+        }
+
+        .logos-slide img {
+            width: 33.33%;
+            /* Set width for each image */
+        }
+    </style>
+</head>
+
+<body>
+    <!--Banner Begin-->
+    <div class="img-hero-box">
+        <div class="logos">
+            <div class="logos-slide">
+                <img src="hero3.png" alt="Responsive websites">
+                <img src="hero4.png" alt="Responsive websites">
+                <img src="hero3.png" alt="Responsive websites">
+                <!-- Add more image elements here... -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Include the JavaScript file -->
+    <script>
+        const slideContainer = document.querySelector('.logos-slide');
+        const images = document.querySelectorAll('.logos-slide img');
+        
+        let currentIndex = 0;
+        let animating = false;
+        
+        function slideImages(timestamp) {
+            if (!animating) return;
+        
+            const imageWidth = images[0].clientWidth; // Get the width of one image
+            const targetOffset = currentIndex * -imageWidth;
+        
+            const currentOffset = parseFloat(slideContainer.style.transform.replace('translateX(', '').replace('%)', '')) || 0;
+            const diff = targetOffset - currentOffset;
+            const easing = 0.1; // Adjust the easing for smoothness
+        
+            const distance = diff * easing;
+            const newPosition = currentOffset + distance;
+        
+            slideContainer.style.transform = `translateX(${newPosition}px)`;
+        
+            if (Math.abs(diff) > 0.5) {
+                requestAnimationFrame(slideImages);
+            } else {
+                currentIndex = (currentIndex + 1) % images.length;
+                animating = false;
+                setTimeout(startAnimation, 3000); // Wait 3 seconds before starting the next animation
+            }
+        }
+        
+        function startAnimation() {
+            animating = true;
+            requestAnimationFrame(slideImages);
+        }
+        
+        startAnimation(); // Start the initial animation
+        
+    </script>
+</body>
+
+</html>
